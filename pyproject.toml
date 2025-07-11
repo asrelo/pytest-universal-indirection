@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools >=68,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asrelo-pytest-universal-indirection"
+readme = "README.md"
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.10"
+dependencies = ["pytest >=8,<9"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["pylint >=3.3.7,<4"]
+
+[project.entry-points.pytest11]
+pytest_universal_indirection = "pytest_universal_indirection.plugin"
+
+#[tool.setuptools.packages]
+
+[tool.setuptools.package-data]
+pytest_universal_indirection = ["VERSION"]
+
+[tool.setuptools.dynamic]
+version = { file = ["pytest_universal_indirection/VERSION"] }
