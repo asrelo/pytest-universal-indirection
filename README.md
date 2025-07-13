@@ -89,17 +89,32 @@ def test_2(universal_indirection):
     ...
 ```
 
-To customize the `universal_indirection` (or `universal_indirection_simple`) fixture, you can use `make_universal_indirection_wrapped` (or `make_universal_indirection_simple_wrapped`) to create a new named wrapper fixture, allowing you to specify `scope` and `autouse` arguments. Or you can create wrapping fixtures yourself. But note that **wrapping fixtures will have different names**. You need to specify the name of the wrapping fixture in function signatures of tests and in `parametrize` calls. `parametrize_universal_indirection` can accomodate a different name with the `fixture_name` keyword argument.
+To customize the `universal_indirection` (or `universal_indirection_simple`) fixture, you can use `make_universal_indirection_wrapped` (or `make_universal_indirection_simple_wrapped`) to create a new wrapper fixture **with a new name**, allowing you to specify `scope` and `autouse` arguments. Or you can create wrapping fixtures yourself. You need to specify the name of the wrapping fixture(s) in function signatures of tests and in `parametrize` calls. `parametrize_universal_indirection` can accomodate different name(s) with the `fixtures` keyword argument.
 
 ```python
-universal_indirection_for_module = make_universal_indirection_wrapped(
-    'universal_indirection_for_module', scope='module',
+indirect_for_module = make_universal_indirection_wrapped(
+    'indirect_for_module', scope='module',
 )
 
+@parametrize_universal_indirection(BASIS_OBJECTS, fixtures='indirect_for_module')
+def test_smth(indirect_for_module):
+    ...
+```
+
+You can as well use multiple wrapped fixtures in the same test, in a similar way to how you use `pytest.mark.parametrize` to set multiple parameters at once:
+
+```python
+indirect_x = make_universal_indirection_wrapped('x')
+indirect_y = make_universal_indirection_wrapped('y')
+
 @parametrize_universal_indirection(
-    BASIS_OBJECTS, fixture_name='universal_indirection_for_module',
+    (
+        (lambda: [-1, 0, 1], 'a'),
+        (lambda: [1, 2, 3], 'b'),
+    ),
+    fixtures=('indirect_x', 'indirect_y'),
 )
-def test_smth(universal_indirection_for_module):
+def test_smth(indirect_x, indirect_y):
     ...
 ```
 

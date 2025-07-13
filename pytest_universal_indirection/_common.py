@@ -47,8 +47,8 @@ class BasisGeneratorFunctionWrapper:
 
 
 def parametrize_universal_indirection_base(
-    fixture_name, basis_objects, ids=None, *, scope=None,
+    fixtures, basis_objects, ids=None, *, scope=None,
 ):
     return pytest.mark.parametrize(
-        fixture_name, basis_objects, ids=ids, scope=scope, indirect=True,
+        fixtures, basis_objects, ids=ids, scope=scope, indirect=True,
     )

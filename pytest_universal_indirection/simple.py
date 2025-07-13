@@ -9,11 +9,11 @@ __all__ = (
 
 
 def parametrize_universal_indirection_simple(
-    basis_objects, ids=None, *, scope=None, fixture_name='universal_indirection_simple',
+    basis_objects, ids=None, *, scope=None, fixtures='universal_indirection_simple',
 ):
     """Add new invocations to the underlying test function using the list
     of basis objects (trying to detect factories automatically)
-    for `universal_indirection`
+    for the `universal_indirection` fixture (or several wrapped fixtures)
 
     This is a wrapper over `pytest.mark.parametrize`.
 
@@ -27,18 +27,25 @@ def parametrize_universal_indirection_simple(
     Arguments:
         basis_objects:
             A list of basis objects (see the package docs).
+            If only one fixture is specified (default), this is a list
+            of values.
+            If N fixtures are specified, this must be a list of N-tuples,
+            where each tuple-element is a basis object for its respective
+            fixture.
         ids:
             Sequence of ids each corresponding to the params so that they are
             part of the test id. If no ids are provided they will be generated
             automatically from the params. (see pytest docs)
         scope:
             The scope for which this fixture is shared. (see pytest docs)
-        fixture_name:
-            Can be used to override the default fixture name. Useful
-            for wrapped fixtures.
+        fixtures:
+            A comma-separated string denoting one or more fixture names,
+            or a list/tuple of fixture names. By default, parametrizes
+            the fixture 'universal_indirection', but can be used
+            to parametrize wrapped fixtures.
     """
     return parametrize_universal_indirection_base(
-        fixture_name, basis_objects, ids=ids, scope=scope,
+        fixtures, basis_objects, ids=ids, scope=scope,
     )
 
 
