@@ -7,8 +7,11 @@ def _get_value_from_basis_object(obj):
     if callable(obj):
         res = obj()
         if isinstance(res, Iterator):
-            yield next(res)  #pylint: disable=stop-iteration-return
-            return res.close()
+            def generator_fn():
+                return (yield from res)
+            # From pytest's POV, it calls a fixture function and recieves
+            # a generator object, properly detecting that it requires teardown.
+            return generator_fn()
         return res
     return obj
 
