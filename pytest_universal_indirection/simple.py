@@ -19,10 +19,14 @@ def parametrize_universal_indirection_simple(
 
     Can be combined with `pytest.mark.parametrize`.
 
+    **Attention**: The `universal_indirection_simple` fixture has a "simple"
+    interface in relation to basis objects, meaning it tries to detect
+    factories in the mapping on the fly. It can make mistakes in certain
+    situations; see the package docs.
+
     Arguments:
         basis_objects:
-            A list of basis objects, with any factories having been wrapped
-            explicitly (see the package docs).
+            A list of basis objects (see the package docs).
         ids:
             Sequence of ids each corresponding to the params so that they are
             part of the test id. If no ids are provided they will be generated
