@@ -58,16 +58,14 @@ There are 2 ways to give the basis objects.
      }
      ```
 
-You can then use a fixture `universal_indirection` (or `universal_indirection_simple`) with an indirectly parametrized test. The corresponding fixture can be indirectly parametrized without extra code with `parametrize_universal_indirection` (or `parametrize_universal_indirection_simple`):
+You can then use a fixture `universal_indirection` (or `universal_indirection_simple`) with an indirectly parametrized test.
 
 ```python
-@parametrize_universal_indirection(BASIS_OBJECTS)
+@pytest.mark.parametrize('universal_indirection', BASIS_OBJECTS, indirect=True)
 def test_parametrized(universal_indirection):
     # use universal_indirection as the needed value
     ...
 ```
-
-You can pass `ids` and `scope` arguments to `parametrize_universal_indirection` as well.
 
 There is no way to avoid some boilerplate to use some function as a standalone fixture and as a basis object at the same time. The example below shows minimal code for the case of a fixtre that does not depend on any other fixture.
 
@@ -84,37 +82,38 @@ def test_1(context):
     ...
 
 # uses the underlying factory function as a basis object
-@parametrize_universal_indirection([build_context])
+@pytest.mark.parametrize('universal_indirection', [build_context], indirect=True)
 def test_2(universal_indirection):
     ...
 ```
 
-To customize the `universal_indirection` (or `universal_indirection_simple`) fixture, you can use `make_universal_indirection_wrapped` (or `make_universal_indirection_simple_wrapped`) to create a new wrapper fixture **with a new name**, allowing you to specify `scope` and `autouse` arguments. Or you can create wrapping fixtures yourself. You need to specify the name of the wrapping fixture(s) in function signatures of tests and in `parametrize` calls. `parametrize_universal_indirection` can accomodate different name(s) with the `fixtures` keyword argument.
+To customize the `universal_indirection` (or `universal_indirection_simple`) fixture, you can use `make_universal_indirection_wrapped` (or `make_universal_indirection_simple_wrapped`) to create a new wrapper fixture **with a new name**, allowing you to specify `scope` and `autouse` arguments. Or you can create wrapping fixtures yourself. You need to specify the name of the wrapping fixture(s) in function signatures of tests and in `parametrize` calls.
 
 ```python
 indirect_for_module = make_universal_indirection_wrapped(
     'indirect_for_module', scope='module',
 )
 
-@parametrize_universal_indirection(BASIS_OBJECTS, fixtures='indirect_for_module')
+@pytest.mark.parametrize('indirect_for_module, BASIS_OBJECTS, indirect=True)
 def test_smth(indirect_for_module):
     ...
 ```
 
-You can as well use multiple wrapped fixtures in the same test, in a similar way to how you use `pytest.mark.parametrize` to set multiple parameters at once:
+You can still use multiple wrapped fixtures in the same test, along with direct parameters:
 
 ```python
 indirect_x = make_universal_indirection_wrapped('x')
 indirect_y = make_universal_indirection_wrapped('y')
 
-@parametrize_universal_indirection(
+@pytest.mark.parametrize(
+    ('indirect_x', 'indirect_y', 'z'),
     (
-        (lambda: [-1, 0, 1], 'a'),
-        (lambda: [1, 2, 3], 'b'),
+        (lambda: [-1, 0, 1], lambda: Context('a'), 12),
+        (lambda: [1, 2, 3], lambda: Context('b'), 42),
     ),
-    fixtures=('indirect_x', 'indirect_y'),
+    indirect=('indirect_x', 'indirect_y'),
 )
-def test_smth(indirect_x, indirect_y):
+def test_smth(indirect_x, indirect_y, z):
     ...
 ```
 

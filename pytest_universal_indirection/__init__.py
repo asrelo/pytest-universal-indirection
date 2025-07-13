@@ -1,62 +1,15 @@
 import pytest
 
-from ._common import (
-    BasisCallableWrapper,
-    BasisGeneratorFunctionWrapper,
-    parametrize_universal_indirection_base,
-)
-from .simple import (
-    parametrize_universal_indirection_simple,
-    make_universal_indirection_simple_wrapped,
-)
+from ._common import BasisCallableWrapper, BasisGeneratorFunctionWrapper
+from .simple import make_universal_indirection_simple_wrapped
 
 
 __all__ = (
     'BasisCallableWrapper',
     'BasisGeneratorFunctionWrapper',
-    'parametrize_universal_indirection',
     'make_universal_indirection_wrapped',
-    'parametrize_universal_indirection_simple',
     'make_universal_indirection_simple_wrapped',
 )
-
-
-def parametrize_universal_indirection(
-    basis_objects, ids=None,
-    *, scope=None, fixtures='universal_indirection',
-):
-    """Add new invocations to the underlying test function using the list
-    of basis objects (with any factories having been wrapped explicitly)
-    for the `universal_indirection` fixture (or several such fixtures)
-
-    This is a wrapper over `pytest.mark.parametrize`.
-
-    Can be combined with `pytest.mark.parametrize`.
-
-    Arguments:
-        basis_objects:
-            A list of basis objects, with any factories having been wrapped
-            explicitly (see the package docs).
-            If only one fixture is specified (default), this is a list
-            of values.
-            If N fixtures are specified, this must be a list of N-tuples,
-            where each tuple-element is a basis object for its respective
-            fixture.
-        ids:
-            Sequence of ids each corresponding to the params so that they are
-            part of the test id. If no ids are provided they will be generated
-            automatically from the params. (see pytest docs)
-        scope:
-            The scope for which this fixture is shared. (see pytest docs)
-        fixtures:
-            A comma-separated string denoting one or more fixture names,
-            or a list/tuple of fixture names. By default, parametrizes
-            the fixture 'universal_indirection', but can be used
-            to parametrize wrapped fixtures.
-    """
-    return parametrize_universal_indirection_base(
-        fixtures, basis_objects, ids=ids, scope=scope,
-    )
 
 
 def make_universal_indirection_wrapped(name, *, scope='function', autouse=False):

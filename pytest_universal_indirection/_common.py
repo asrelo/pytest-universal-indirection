@@ -1,6 +1,3 @@
-import pytest
-
-
 class BasisCallableWrapper:
     """Wrapper for a factory function returning an object
 
@@ -44,11 +41,3 @@ class BasisGeneratorFunctionWrapper:
         gen = self.generator_function(param)
         yield next(gen)  #pylint: disable=stop-iteration-return
         return gen.close()
-
-
-def parametrize_universal_indirection_base(
-    fixtures, basis_objects, ids=None, *, scope=None,
-):
-    return pytest.mark.parametrize(
-        fixtures, basis_objects, ids=ids, scope=scope, indirect=True,
-    )
