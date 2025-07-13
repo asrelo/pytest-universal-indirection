@@ -1,6 +1,6 @@
 # asrelo-pytest-universal-indirection
 
-The universal indirection fixture accepts a *basis object* (see below) as a parameter (typically &mdash; an indirect parameter from a test) and produces a value using that object. This was developed as a (somewhat) convenient solution to pytest's inability to process fixtures passed to a test through `pytest.parametrize`.
+The universal indirection fixture accepts a *basis object* (see below) as a parameter (typically &mdash; an indirect parameter from a test) and produces a value using that object. This was developed as a (somewhat) convenient solution to pytest's inability to process fixtures passed to a test through `pytest.mark.parametrize`.
 
 *Basis objects* can be standalone objects or factories for objects. Standalone objects are then provided to code in tests directly (and they are better be immutable). Factories for objects follow the pytest's convention for fixture functions: one either returns the object to be used or yields a single object to be used (pytest's [teardown mechanism](https://docs.pytest.org/en/stable/how-to/fixtures.html#yield-fixtures-recommended)). Factories are either called with no arguments or a single positional argument for a parameter value when the created fixture is parametrized (see below).
 
